@@ -8,6 +8,7 @@ boolean init = false;
 int prevSec;
 int millisDiff;
 boolean play = false;
+float clkFill = 64;
 
 void setup() {
   size(displayWidth, displayHeight);
@@ -22,6 +23,17 @@ void setup() {
 
 void draw() {
   background(0);
+  
+  //create clock transparency control
+  strokeWeight(6);
+  stroke(125,249,255,127.5);
+  line(displayWidth - 430, 20, displayWidth - 430, 120); 
+  noStroke();
+  fill(125, 249, 255);
+  ellipse(displayWidth - 430, map(clkFill, 255, 0, 20, 120), 6, 6);
+  if (mouseX >= displayWidth - 440 && mouseX <= displayWidth - 420 && mouseY >= 20 && mouseY <= 120 && mousePressed == true){
+    clkFill = map(mouseY, 120, 20, 0, 255);
+  }
   //Put milliseconds in real time
   if (init == true && second() != prevSec) {
     millisDiff = millis();
@@ -65,13 +77,13 @@ void draw() {
       textAlign(CENTER,CENTER);
       text(str(hour()) + ":" + str(minute()) + ":" + str(second()), width - 210, 60);
     } else {
-      fill(125,249,255,64);
+      fill(125,249,255,clkFill);
       noStroke();
       rect(width - 100, 20, 80, (100 * (millis()-millisDiff)/1000)%100);
       rect(width - 200, 20, 80, (100 * second()/60)%100);
       rect(width - 300, 20, 80, (100 * minute()/60)%100);
       rect(width - 400, 20, 80, (100 * hour()/24)%100);
-      stroke(125,249,255,64);
+      stroke(125,249,255,clkFill);
       strokeWeight(1);
       line(width - 420, 20, width - 420, 120);//verticle line
       line(width - 420, 20, width - 405, 20);//top line
@@ -83,7 +95,7 @@ void draw() {
   }
   
   //draw the play/pause bar
-  if (dist(width/2, height/2, mouseX, mouseY) <= 20 && mousePressed == true || keyPressed == true && key == ' ') { 
+  if (dist(width/2, height/2, mouseX, mouseY) <= 40 && mousePressed == true || keyPressed == true && key == ' ') { 
     fill(125, 249, 255);
   } else {
     fill(62.5, 124.5, 127.5);
@@ -91,7 +103,7 @@ void draw() {
   noStroke();
   rect(0, height/2 - 5, width/2 - 30, 10);
   rect(width/2 + 30, height/2 - 5, width/2 - 30, 10);
-  if (dist(width/2, height/2, mouseX, mouseY) <= 20 || keyPressed == true && key == ' ') { 
+  if (dist(width/2, height/2, mouseX, mouseY) <= 40 || keyPressed == true && key == ' ') { 
     fill(125, 249, 255);
   } else {
     fill(62.5, 124.5, 127.5);
@@ -157,10 +169,10 @@ void draw() {
 }
 
 void mouseClicked() {
-  if (play == false && dist(width/2, height/2, mouseX, mouseY) <= 20) {
+  if (play == false && dist(width/2, height/2, mouseX, mouseY) <= 40) {
     play = true;
     player.play();
-  } else if (play == true && dist(width/2, height/2, mouseX, mouseY) <= 20) {
+  } else if (play == true && dist(width/2, height/2, mouseX, mouseY) <= 40) {
     play = false;
     player.pause();
   }
@@ -175,5 +187,8 @@ void keyTyped() {
       play = false;
       player.pause();
     }
+  }
+  if (key == 'm'){
+    println(clkFill);
   }
 }
