@@ -27,11 +27,11 @@ void draw() {
   //create clock transparency control
   strokeWeight(6);
   stroke(125,249,255,127.5);
-  line(displayWidth - 430, 20, displayWidth - 430, 120); 
+  line(width - 430, 20, width - 430, 120); 
   noStroke();
   fill(125, 249, 255);
-  ellipse(displayWidth - 430, map(clkFill, 255, 0, 20, 120), 6, 6);
-  if (mouseX >= displayWidth - 440 && mouseX <= displayWidth - 420 && mouseY >= 20 && mouseY <= 120 && mousePressed == true){
+  ellipse(width - 430, map(clkFill, 255, 0, 20, 120), 6, 6);
+  if (mouseX >= width - 440 && mouseX <= width - 420 && mouseY >= 20 && mouseY <= 120 && mousePressed == true){
     clkFill = map(mouseY, 120, 20, 0, 255);
   }
   //Put milliseconds in real time
@@ -146,25 +146,55 @@ void draw() {
   }
   
   //draw progress meter
-  strokeWeight(6);
+  if (mouseX >= 25 && mouseX <= width - 25 && mouseY >= height - 100 && mouseY <= height - 70) {
+    strokeWeight(15);
+  } else {
+    strokeWeight(6);
+  }
   stroke(125, 249, 255, 127.5);
   line(50, height - 85, width - 50, height - 85);
   fill(125, 249, 255);
   noStroke();
-  ellipse(map(player.position(), 0, player.length(), 50, width - 50), height - 85, 3, 3 );
+  if (mouseX >= 25 && mouseX <= width - 25 && mouseY >= height - 100 && mouseY <= height - 70) {
+    ellipse(map(player.position(), 0, player.length(), 50, width - 50), height - 85, 6, 6 );
+  } else {
+    ellipse(map(player.position(), 0, player.length(), 50, width - 50), height - 85, 3, 3 );
+  }
   noStroke();
   fill(125, 249, 255, 127.5);
   textAlign(CENTER,TOP);
   textSize(10);
-  if (floor(player.position()/1000)%60 < 10) {
-    text(str(floor(player.position()/60000)%60) + ":0" + str(floor(player.position()/1000)%60), 50, height - 80);
+  if (mouseX >= 25 && mouseX <= width - 25 && mouseY >= height - 100 && mouseY <= height - 70) {
+    if (floor(player.position()/1000)%60 < 10) {
+      text(str(floor(player.position()/60000)%60) + ":0" + str(floor(player.position()/1000)%60), 50, height - 73);
+    } else {
+      text(str(floor(player.position()/60000)%60) + ":" + str(floor(player.position()/1000)%60), 50, height - 73);
+    }
+    if (floor(player.length()/1000)%60 < 10) {
+      text(str(floor(player.length()/60000)%60) + ":0" + str(floor(player.length()/1000)%60), width - 50, height - 73);
+    } else {
+      text(str(floor(player.length()/60000)%60) + ":" + str(floor(player.length()/1000)%60), width - 50, height - 73);
+    }
   } else {
-    text(str(floor(player.position()/60000)%60) + ":" + str(floor(player.position()/1000)%60), 50, height - 80);
+    if (floor(player.position()/1000)%60 < 10) {
+      text(str(floor(player.position()/60000)%60) + ":0" + str(floor(player.position()/1000)%60), 50, height - 80);
+    } else {
+      text(str(floor(player.position()/60000)%60) + ":" + str(floor(player.position()/1000)%60), 50, height - 80);
+    }
+    if (floor(player.length()/1000)%60 < 10) {
+      text(str(floor(player.length()/60000)%60) + ":0" + str(floor(player.length()/1000)%60), width - 50, height - 80);
+    } else {
+      text(str(floor(player.length()/60000)%60) + ":" + str(floor(player.length()/1000)%60), width - 50, height - 80);
+    }
   }
-  if (floor(player.length()/1000)%60 < 10) {
-    text(str(floor(player.length()/60000)%60) + ":0" + str(floor(player.length()/1000)%60), width - 50, height - 80);
-  } else {
-    text(str(floor(player.length()/60000)%60) + ":" + str(floor(player.length()/1000)%60), width - 50, height - 80);
+  if (mouseX >= 50 && mouseX <= width - 50 && mouseY >= height - 100 && mouseY <= height - 70) {
+    textAlign(CENTER,BOTTOM);
+    textSize(11);
+    if (floor(map(mouseX, 50, width - 50, 0, player.length())/1000)%60 < 10) {
+      text(str(floor(map(mouseX, 50, width - 50, 0, player.length())/60000)%60) + ":0" + str(floor(map(mouseX, 50, width - 50, 0, player.length())/1000)%60), mouseX, height - 100);
+    } else {
+      text(str(floor(map(mouseX, 50, width - 50, 0, player.length())/60000)%60) + ":" + str(floor(map(mouseX, 50, width - 50, 0, player.length())/1000)%60), mouseX, height - 100);
+    }
   }
 }
 
@@ -175,6 +205,9 @@ void mouseClicked() {
   } else if (play == true && dist(width/2, height/2, mouseX, mouseY) <= 40) {
     play = false;
     player.pause();
+  }
+  if (mouseX >= 50 && mouseX <= width - 50 && mouseY >= height - 100 && mouseY <= height - 70) {
+   player.skip(floor(map(mouseX, 50, width - 50, 0, player.length()) - player.position()));
   }
 }
 
@@ -190,5 +223,17 @@ void keyTyped() {
   }
   if (key == 'm'){
     println(clkFill);
+  }
+}
+
+void keyReleased() {
+  if (key == CODED) {
+    if (keyCode == RIGHT && player.position() + 5000 < player.length()) {
+      player.skip(5000);
+    } else if (keyCode == LEFT && player.position() - 5000 > 0) {
+      player.skip(-5000);
+    } else if (keyCode == RIGHT || keyCode == LEFT) {
+      player.rewind();
+    }
   }
 }
