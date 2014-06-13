@@ -2,6 +2,7 @@ import ddf.minim.*;
 Minim minim;
 AudioPlayer player;
 AudioOutput out;
+int speakerSize = 400;
 
 void setup() {
   size(displayWidth, displayHeight, P3D);
@@ -14,10 +15,12 @@ void setup() {
 
 void draw() {
   background(0);
-  for(int i = round(dist(width,0,width/2,height/2) - 1); i > 0; i-=5) {
-    stroke(map(player.left.get(i),-1,1,0,255),map(player.left.get(i),-1,1,0,255),map(player.left.get(i),-1,1,0,255),map(i,0,dist(width,0,width/2,height/2) - 1,255,0));
+  for(int i = speakerSize; i > 0; i-=5) {
     strokeWeight(5);
     noFill();
-    ellipse(width/2,height/2,i,i);
+    stroke(map(player.left.get(floor(map(i,speakerSize,0,0,player.bufferSize()))),-1,1,0,255),map(i,0,speakerSize,255,0));
+    ellipse(width/2 - speakerSize/2,height/2,i,i);
+    stroke(map(player.right.get(floor(map(i,speakerSize,0,0,player.bufferSize()))),-1,1,0,255),map(i,0,speakerSize,255,0));
+    ellipse(width/2 + speakerSize/2,height/2,i,i);
   }
 }

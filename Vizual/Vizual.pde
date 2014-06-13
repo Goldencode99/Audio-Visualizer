@@ -291,7 +291,7 @@ void draw() {
     }
   }
   //create load song button
-  noStroke();
+    noStroke();
   if (mouseX >= 40 && mouseX <= 120 && mouseY >=0 && mouseY <= 80) {
     fill(125, 249, 255);
   } else {
@@ -317,9 +317,8 @@ void mouseClicked() {
   }
   if (mouseX >= 40 && mouseX <= 120 && mouseY >=0 && mouseY <= 80) {
     play = false;
-    selectingSong = true;
     player.pause();
-    player.rewind();
+    selectingSong = true;
     selectInput("Load a new song:", "addNew");
   }
 }
