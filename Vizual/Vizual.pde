@@ -39,38 +39,30 @@ void draw() {
   fill(0,0,0,afterGlow);
   rect(0,height/2 - 210,width,420);
   fill(125,249,255,127.5);
-  if (mouseX >= width - 550 && mouseX <= width - 520 && mouseY >= 20 && mouseY <= 120) {
-    stroke(125,249,255);
-    strokeWeight(1);
-    strokeCap(SQUARE);
-  }
-  rect(width - 550, 20, 30, 100);
-  noStroke();
   strokeCap(ROUND);
-  fill(125,249,255);
-  rect(width - 550, map(afterGlow, 0, 255, 25, 115) - 5, 30, 10);
-  if (mouseX >= width - 550 && mouseX <= width - 520 && mouseY >= 25 && mouseY <= 115 && mousePressed == true) {
+  strokeWeight(6);
+  stroke(125, 249, 255, 127.5);
+  line(width - 480, 20, width - 480, 120);
+  stroke(125, 249, 255);
+  strokeWeight(8);
+  if (mouseX >= width - 495 && mouseX <= width - 465 && mouseY >= 25 && mouseY <= 115 && mousePressed == true) {
     afterGlow = map(mouseY, 25, 115, 0, 255);
   }
-  if (mouseX >= width - 550 && mouseX <= width - 520 && mouseY >= 20 && mouseY < 25 && mousePressed == true) {
+  if (mouseX >= width - 495 && mouseX <= width - 465 && mouseY >= 20 && mouseY < 25 && mousePressed == true) {
     afterGlow = 0;
   }
-  if (mouseX >= width - 550 && mouseX <= width - 520 && mouseY > 115 && mouseY <= 120 && mousePressed == true) {
+  if (mouseX >= width - 495 && mouseX <= width - 465 && mouseY > 115 && mouseY <= 120 && mousePressed == true) {
     afterGlow = 255;
   }
+  line(width - 490, map(afterGlow, 0, 255, 20, 120), width - 470, map(afterGlow, 0, 255, 20, 120));
   
   //create clock transparency control
-  fill(125,249,255,127.5);
-  if (mouseX >= width - 460 && mouseX <= width - 430 && mouseY >= 20 && mouseY <= 120) {
-    stroke(125,249,255);
-    strokeWeight(1);
-    strokeCap(SQUARE);
-  }
-  rect(width - 460, 20, 30, 100);
-  noStroke();
   strokeCap(ROUND);
-  fill(125,249,255);
-  rect(width - 460, map(clkFill, 255, 0, 25, 115) - 5, 30, 10);
+  strokeWeight(6);
+  stroke(125, 249, 255, 127.5);
+  line(width - 445, 20, width - 445, 120);
+  stroke(125, 249, 255);
+  strokeWeight(8);
   if (mouseX >= width - 460 && mouseX <= width - 430 && mouseY >= 25 && mouseY <= 115 && mousePressed == true) {
     clkFill = map(mouseY, 115, 25, 0, 255);
   }
@@ -80,6 +72,7 @@ void draw() {
   if (mouseX >= width - 460 && mouseX <= width - 430 && mouseY > 115 && mouseY <= 120 && mousePressed == true) {
     clkFill = 0;
   }
+  line(width - 455, map(clkFill, 255, 0, 20, 120), width - 435, map(clkFill, 255, 0, 20, 120));
   
   //Put milliseconds in real time
   if (init == true && second() != prevSec) {
@@ -223,19 +216,17 @@ void draw() {
   }
   
   //draw amplitude indicators
-  strokeCap(ROUND);
-  strokeWeight(6);
-  stroke(125, 249, 255, 127.5);
-  line(width - 730, 20, width - 730, 120);
-  line(width - 690, 20, width - 690, 120);
-  line(width - 650, 20, width - 650, 120);
-  line(width - 610, 20, width - 610, 120);
-  stroke(125, 249, 255);
-  strokeWeight(8);
-  line(width - 740, map(leftPeakAmp, 0, 1, 120, 20), width - 720, map(leftPeakAmp, 0, 1, 120, 20));
-  line(width - 700, map(leftAvgAmp, -.5, .5, 120, 20), width - 680, map(leftAvgAmp, -.5, .5, 120, 20));
-  line(width - 660, map(rightPeakAmp, 0, 1, 120, 20), width - 640, map(rightPeakAmp, 0, 1, 120, 20));
-  line(width - 620, map(rightAvgAmp, -.5, .5, 120, 20), width - 600, map(rightAvgAmp, -.5, .5, 120, 20));
+  noStroke();
+  fill(125, 249, 255, 127.5);
+  rect(width - 650, 20, 20, 100);
+  rect(width - 610, 20, 20, 100);
+  rect(width - 570, 20, 20, 100);
+  rect(width - 530, 20, 20, 100);
+  fill(125, 249, 255);
+  rect(width - 650, map(leftPeakAmp, 0, 1, 115, 25) - 5, 20, 10);
+  rect(width - 610, map(leftAvgAmp, -.5, .5, 115, 25) - 5, 20, 10);
+  rect(width - 570, map(rightPeakAmp, 0, 1, 115, 25) - 5, 20, 10);
+  rect(width - 530, map(rightAvgAmp, -.5, .5, 115, 25) - 5, 20, 10);
   
   //draw progress meter
   if(songSelected == true) {
@@ -290,6 +281,35 @@ void draw() {
       }
     }
   }
+  
+  //draw pressure wave visualizer
+  noFill();
+  strokeWeight(3);
+  stroke(125,249,255);
+  ellipse(width - 720, 70, 90, 90);
+  ellipse(width - 840, 70, 90, 90);
+  line(width - 840, 25, width - 720, 25);
+  line(width - 840, 115, width - 720, 115);
+  if (play == true) {
+    for(int i = 100; i > 0; i-=2) {
+      strokeWeight(2);
+      noFill();
+      stroke(map(player.left.get(floor(map(i,100,0,0,player.bufferSize()))),-1,1,0,125),map(player.left.get(floor(map(i,100,0,0,player.bufferSize()))),-1,1,0,249),map(player.left.get(floor(map(i,100,0,0,player.bufferSize()))),-1,1,0,225), map(i,100,0,0,255));
+      ellipse(width - 720,70,i,i);
+      stroke(map(player.right.get(floor(map(i,100,0,0,player.bufferSize()))),-1,1,0,125),map(player.right.get(floor(map(i,100,0,0,player.bufferSize()))),-1,1,0,249),map(player.right.get(floor(map(i,100,0,0,player.bufferSize()))),-1,1,0,225), map(i,100,0,0,255));
+      ellipse(width - 840,70,i,i);
+    }
+  } else if (play == false) {
+    for(int i = 100; i > 0; i-=2) {
+      strokeWeight(2);
+      noFill();
+      stroke(map(in.left.get(floor(map(i,100,0,0,in.bufferSize()))),-1,1,0,125),map(in.left.get(floor(map(i,100,0,0,in.bufferSize()))),-1,1,0,249),map(in.left.get(floor(map(i,100,0,0,in.bufferSize()))),-1,1,0,225), map(i,100,0,0,255));
+      ellipse(width - 720,70,i,i);
+      stroke(map(in.right.get(floor(map(i,100,0,0,in.bufferSize()))),-1,1,0,125),map(in.right.get(floor(map(i,100,0,0,in.bufferSize()))),-1,1,0,249),map(in.right.get(floor(map(i,100,0,0,in.bufferSize()))),-1,1,0,225), map(i,100,0,0,255));
+      ellipse(width - 840,70,i,i);
+    }
+  }
+  
   //create load song button
     noStroke();
   if (mouseX >= 40 && mouseX <= 120 && mouseY >=0 && mouseY <= 80) {
