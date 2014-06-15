@@ -288,8 +288,7 @@ void draw() {
   stroke(125,249,255);
   ellipse(width - 720, 70, 90, 90);
   ellipse(width - 840, 70, 90, 90);
-  line(width - 840, 25, width - 720, 25);
-  line(width - 840, 115, width - 720, 115);
+  rect(width - 890, 20, 220, 100);
   if (play == true) {
     for(int i = 100; i > 0; i-=2) {
       strokeWeight(2);
